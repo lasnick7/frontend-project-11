@@ -25,6 +25,13 @@ export default {
       },
     ],
   },
+  devServer: {
+    static: './dist',
+    hot: true,
+    liveReload: true,
+    open: true,
+    watchFiles: ['./src/**/*'],
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
@@ -33,4 +40,5 @@ export default {
   output: {
     clean: true,
   },
+  watch: true,
 };
