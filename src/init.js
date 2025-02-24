@@ -32,11 +32,11 @@ export default function app() {
     .then(() => {
         yup.setLocale({
             mixed: {
-                required: i18nextInstance.t('errors.empty'),
-                notOneOf: i18nextInstance.t('errors.exists'),
+                required: 'empty',
+                notOneOf: 'exists',
             },
             string: {
-                url: i18nextInstance.t('errors.invalidUrl'),
+                url:'invalidUrl',
             },
         });
 
