@@ -30,7 +30,6 @@ export default {
   //   hot: true,
   //   liveReload: true,
   //   open: true,
-  //   watchFiles: ['./src/**/*'],
   // },
   plugins: [
     new HtmlWebpackPlugin({
@@ -40,5 +39,4 @@ export default {
   output: {
     clean: true,
   },
-  // watch: true,
 };

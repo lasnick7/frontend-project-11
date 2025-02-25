@@ -24,7 +24,7 @@ export default function app() {
 
     const i18nextInstance = i18next.createInstance();
 
-    i18nextInstance.init({
+    const i18nextPromise = i18nextInstance.init({
         lng: 'ru', 
         debug: true,
         resources,
@@ -32,7 +32,7 @@ export default function app() {
     .then(() => {
         yup.setLocale({
             mixed: {
-                required: 'empty',
+                required: 'empty', // {key: empty}
                 notOneOf: 'exists',
             },
             string: {
@@ -48,7 +48,7 @@ export default function app() {
             .then(() => {
                 return null;
             }).catch((error) => {
-                return error.message;
+                return error.message; 
             })
         }
 
@@ -74,4 +74,6 @@ export default function app() {
             watchedState.rssInput.status = 'filling';
         });
     });
+
+    return i18nextPromise;
 }
