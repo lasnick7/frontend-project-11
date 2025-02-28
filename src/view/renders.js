@@ -41,7 +41,7 @@ function renderFeeds(elements, i18next, feeds) {
     feedItem.append(feedTitle);
     feedItem.append(feedDescription);
     
-    feedList.append(feedItem)
+    feedList.prepend(feedItem)
 
     console.log('feed card container exists');
     console.log(newFeed)
