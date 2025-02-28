@@ -2,13 +2,56 @@ import i18next from "i18next";
 import resources from './locales/index.js';
 import * as yup from 'yup';
 import uniqueId from "lodash.uniqueid";
-import watch from './view.js';
+import watch from './view/view.js';
+import parser from './parsers.js'
+
+function loadRss(watchedState, url) {
+    watchedState.loadingProcess.status = 'loading';
+    return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // console.log('response json', responseJson)
+
+            const parsedXML = parser(responseJson.contents);
+            // console.log('parsed data', parsedXML)
+
+            watchedState.loadingProcess.error = null;
+
+            watchedState.loadingProcess.status = 'success';
+
+            const feedId = uniqueId('feed_');
+            const feed = {
+                feedId: feedId,
+                url: responseJson.status.url,
+                title: parsedXML.feedTitle,
+                description: parsedXML.feedDescription,
+            };
+            watchedState.feeds.unshift(feed);
+
+            const posts = parsedXML.posts.map((post) => {
+                return {
+                    feedId: feedId,
+                    postId: uniqueId('post_'),
+                    title: post.postTitle,
+                    description: post.postDescription,
+                    link: post.postLink,
+                }
+            });
+            watchedState.posts.unshift(...posts);
+        }).catch((error) => {
+            console.log('rss loading error', error.message);
+            watchedState.loadingProcess.error = error.message;
+
+            watchedState.loadingProcess.status = 'failed';
+        })      
+}
 
 export default function app() {
     const elements = {
         form: document.querySelector('form.rss-form'),
         input: document.querySelector('#url-input'),
         button: document.querySelector('#add-url-button'),
+        feedback: document.querySelector('.feedback'),
         posts: document.querySelector('div.posts'),
         feeds: document.querySelector('div.feeds'),
     };
@@ -16,8 +59,13 @@ export default function app() {
     const state = {
         rssInput: {
             status: 'filling',
+            isValid: '?',
             error: null,  
         },
+        loadingProcess: {
+            status: '',
+            error: null,
+        }, 
         feeds: [],
         posts: [],
     };
@@ -59,19 +107,22 @@ export default function app() {
             const value = elements.input.value;
 
             validateField(value, watchedState.feeds).then((message) => {
-                if (!message) {
-                    watchedState.feeds.push({
-                        id: uniqueId('feed_'),
-                        url: value,
-                    });
-                }
                 watchedState.rssInput.error = message;
-                watchedState.rssInput.status = 'sent'
+                if (!message) {
+                    watchedState.rssInput.isValid = true;
+                    loadRss(watchedState, value).then(() => {
+                        watchedState.rssInput.status = 'sent'
+                    });
+                } else {
+                    watchedState.rssInput.isValid = false;
+                    watchedState.rssInput.status = 'sent'
+                }
             })
         });
 
         elements.input.addEventListener('input', () => {
             watchedState.rssInput.status = 'filling';
+            watchedState.rssInput.isValid = '?';
         });
     });
 

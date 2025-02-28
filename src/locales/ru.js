@@ -4,7 +4,7 @@ export default {
             missing: 'Вы пропустили это поле.',
         },
         errors: {
-            exists: ' RSS уже существует,', 
+            exists: ' RSS уже существует', 
             empty: 'Не должно быть пустым',
             invalidUrl: 'Ссылка должна быть валидным URL',
             invalidRss: 'Ресурс не содержит валидный RSS',
@@ -16,6 +16,10 @@ export default {
         },
         buttons: {
             watch: 'Просмотр,',
+        },
+        titles: {
+            feeds: 'Фиды',
+            posts: 'Посты',
         },
     },
 }
