@@ -1,9 +1,9 @@
 import onChange from "on-change";
 import { loadingProcessValidationHandler, rssInputValidationHandler } from './handlers.js';
-import { renderFeeds } from "./renders.js";
+import { renderFeeds, renderPosts } from "./renders.js";
 
 export default function(elements, i18next, state) {
-    function render(path, value) {
+    function render(path, value, previousValue) {
         switch (path) {
             case 'feeds':
                 console.log('feed added: ', value);
@@ -11,6 +11,7 @@ export default function(elements, i18next, state) {
                 break
             case 'posts':
                 console.log('posts added: ', value);
+                renderPosts(elements, i18next, value, previousValue);
                 break
             case 'rssInput.error':
                 console.log('errors added: ', value)

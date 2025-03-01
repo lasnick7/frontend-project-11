@@ -5,6 +5,13 @@ import uniqueId from "lodash.uniqueid";
 import watch from './view/view.js';
 import parser from './parsers.js'
 
+function getErrorType(error) {
+    if (error === 'invalidRss') {
+        return error;
+    } 
+    return 'undefined';
+}
+
 function loadRss(watchedState, url) {
     watchedState.loadingProcess.status = 'loading';
     return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
@@ -40,7 +47,7 @@ function loadRss(watchedState, url) {
             watchedState.posts.unshift(...posts);
         }).catch((error) => {
             console.log('rss loading error', error.message);
-            watchedState.loadingProcess.error = error.message;
+            watchedState.loadingProcess.error = getErrorType(error.message);
 
             watchedState.loadingProcess.status = 'failed';
         })      

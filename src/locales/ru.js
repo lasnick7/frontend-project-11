@@ -15,7 +15,7 @@ export default {
             uploaded: 'RSS успешно загружен',
         },
         buttons: {
-            watch: 'Просмотр,',
+            watch: 'Просмотр',
         },
         titles: {
             feeds: 'Фиды',
