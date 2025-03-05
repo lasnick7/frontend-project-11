@@ -8,7 +8,9 @@ import parser from './parsers.js'
 function getErrorType(error) {
     if (error === 'invalidRss') {
         return error;
-    } 
+    } else if (error === 'Failed to fetch') {
+        return 'network';
+    }
     return 'undefined';
 }
 
@@ -51,6 +53,17 @@ function loadRss(watchedState, url) {
 
             watchedState.loadingProcess.status = 'failed';
         })      
+}
+
+function loadNewPosts(watchedState) {
+    watchedState.feeds.map((feed) => {
+        return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(feed.url)}`)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                const parsedXML = parser(responseJson.contents);
+                console.log(parsedXML.posts)
+            })
+    })
 }
 
 export default function app() {
@@ -108,6 +121,17 @@ export default function app() {
         }
 
         const watchedState = watch(elements, i18nextInstance, state);
+
+        setTimeout(() => loadNewPosts(watchedState), 10000)
+        setTimeout(() => loadNewPosts(watchedState), 30000)
+        setTimeout(() => loadNewPosts(watchedState), 50000)
+        setTimeout(() => loadNewPosts(watchedState), 70000)
+        setTimeout(() => loadNewPosts(watchedState), 90000)
+        setTimeout(() => loadNewPosts(watchedState), 110000)
+        setTimeout(() => loadNewPosts(watchedState), 130000)
+        setTimeout(() => loadNewPosts(watchedState), 150000)
+        // setTimeout(() => loadNewPosts(watchedState), 90000)
+        // setTimeout(() => loadNewPosts(watchedState), 100000)
 
         elements.form.addEventListener('submit', (event) => {
             event.preventDefault();
