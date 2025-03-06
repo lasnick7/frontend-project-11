@@ -14,9 +14,14 @@ function getErrorType(error) {
     return 'undefined';
 }
 
+function generateRandomParam() {
+    const randomParam = Math.random().toString(36).substring(7);
+    return randomParam;
+}
+
 function loadRss(watchedState, url) {
     watchedState.loadingProcess.status = 'loading';
-    return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+    return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}&v=${generateRandomParam()}`)
         .then((response) => response.json())
         .then((responseJson) => {
             // console.log('response json', responseJson)
@@ -56,13 +61,40 @@ function loadRss(watchedState, url) {
 }
 
 function loadNewPosts(watchedState) {
-    watchedState.feeds.map((feed) => {
-        return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(feed.url)}`)
+    // console.log('watched state feeds', watchedState.feeds);
+    const fetchNewPostsPromices = watchedState.feeds.map((feed) => {
+        return fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(feed.url)}&v=${generateRandomParam()}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 const parsedXML = parser(responseJson.contents);
-                console.log(parsedXML.posts)
-            })
+
+                const currentFeedId = feed.feedId;
+                const oldPosts = watchedState.posts.filter((post) => post.feedId === currentFeedId);
+
+                // const allTitles = parsedXML.posts.map((post) => post.postTitle);
+                const oldTitles = oldPosts.map((post) => post.title);
+
+                const newPosts = parsedXML.posts
+                    .filter((post) => !oldTitles.includes(post.postTitle))
+                    .map((post) => {
+                        return {
+                            feedId: currentFeedId,
+                            postId: uniqueId('post_'),
+                            title: post.postTitle,
+                            description: post.postDescription,
+                            link: post.postLink,
+                        } 
+                    });
+                watchedState.posts.unshift(...newPosts);
+
+                console.log('all posts for current feed', parsedXML.posts)
+                console.log('old titles for current feed', oldTitles)
+                console.log('new posts for current feed', newPosts)
+            }).catch(error => console.log(error))
+    });
+    Promise.all(fetchNewPostsPromices).finally(() => {
+        console.log('promises are promised')
+        setTimeout(() => loadNewPosts(watchedState), 5000)
     })
 }
 
@@ -122,16 +154,6 @@ export default function app() {
 
         const watchedState = watch(elements, i18nextInstance, state);
 
-        setTimeout(() => loadNewPosts(watchedState), 10000)
-        setTimeout(() => loadNewPosts(watchedState), 30000)
-        setTimeout(() => loadNewPosts(watchedState), 50000)
-        setTimeout(() => loadNewPosts(watchedState), 70000)
-        setTimeout(() => loadNewPosts(watchedState), 90000)
-        setTimeout(() => loadNewPosts(watchedState), 110000)
-        setTimeout(() => loadNewPosts(watchedState), 130000)
-        setTimeout(() => loadNewPosts(watchedState), 150000)
-        // setTimeout(() => loadNewPosts(watchedState), 90000)
-        // setTimeout(() => loadNewPosts(watchedState), 100000)
 
         elements.form.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -155,6 +177,10 @@ export default function app() {
             watchedState.rssInput.status = 'filling';
             watchedState.rssInput.isValid = '?';
         });
+
+        console.log('set timeouts init')
+
+        loadNewPosts(watchedState)
     });
 
     return i18nextPromise;
