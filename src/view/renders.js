@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 function setAttibutestoPostElement(element, id, link) {
   const a = element.querySelector('a');
   const button = element.querySelector('button');

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 function rssInputValidationHandler(elements, i18next, state, value) {
   console.log('url validation status changed: ', value);
   console.log('current url validation error', state.rssInput.error);

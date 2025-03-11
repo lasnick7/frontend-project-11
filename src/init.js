@@ -1,14 +1,17 @@
 import i18next from 'i18next';
-import resources from './locales/index.js';
 import * as yup from 'yup';
 import uniqueId from 'lodash.uniqueid';
+import resources from './locales/index.js';
 import watch from './view/view.js';
 import parser from './parsers.js';
+
+/* eslint-disable no-param-reassign */
 
 function getErrorType(error) {
   if (error === 'invalidRss') {
     return error;
-  } else if (error === 'Failed to fetch') {
+  } 
+  if (error === 'Failed to fetch') {
     return 'network';
   }
   return 'undefined';
@@ -19,7 +22,6 @@ function getErrorType(error) {
 //     return randomParam;
 // }
 // &v=${generateRandomParam()}
-/* eslint-disable no-param-reassign */
 
 function loadRss(watchedState, url) {
   watchedState.loadingProcess.status = 'loading';
@@ -28,10 +30,8 @@ function loadRss(watchedState, url) {
   )
     .then((response) => response.json())
     .then((responseJson) => {
-      // console.log('response json', responseJson)
 
       const parsedXML = parser(responseJson.contents);
-      // console.log('parsed data', parsedXML)
 
       watchedState.loadingProcess.error = null;
 
@@ -39,22 +39,20 @@ function loadRss(watchedState, url) {
 
       const feedId = uniqueId('feed_');
       const feed = {
-        feedId: feedId,
-        url: url,
+        feedId,
+        url,
         title: parsedXML.feedTitle,
         description: parsedXML.feedDescription,
       };
       watchedState.feeds.unshift(feed);
 
-      const posts = parsedXML.posts.map((post) => {
-        return {
-          feedId: feedId,
+      const posts = parsedXML.posts.map((post) => ({
+          feedId,
           postId: uniqueId('post_'),
           title: post.postTitle,
           description: post.postDescription,
           link: post.postLink,
-        };
-      });
+      }));
       watchedState.posts.unshift(...posts);
     })
     .catch((error) => {
