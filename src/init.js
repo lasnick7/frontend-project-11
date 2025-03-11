@@ -7,6 +7,7 @@ import parser from './parsers.js';
 
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
+/* eslint-disable prefer-destructuring */
 
 function getErrorType(error) {
   if (error === 'invalidRss') {
@@ -26,9 +27,7 @@ function getErrorType(error) {
 
 function loadRss(watchedState, url) {
   watchedState.loadingProcess.status = 'loading';
-  return fetch(
-    `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`
-  )
+  return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
     .then((response) => response.json())
     .then((responseJson) => {
       const parsedXML = parser(responseJson.contents);
@@ -66,17 +65,13 @@ function loadRss(watchedState, url) {
 function loadNewPosts(watchedState) {
   // console.log('watched state feeds', watchedState.feeds);
   const fetchNewPostsPromices = watchedState.feeds.map((feed) => {
-    return fetch(
-      `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`
-    )
+    return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
       .then((response) => response.json())
       .then((responseJson) => {
         const parsedXML = parser(responseJson.contents);
 
         const currentFeedId = feed.feedId;
-        const oldPosts = watchedState.posts.filter(
-          (post) => post.feedId === currentFeedId
-        );
+        const oldPosts = watchedState.posts.filter((post) => post.feedId === currentFeedId);
 
         // const allTitles = parsedXML.posts.map((post) => post.postTitle);
         const oldTitles = oldPosts.map((post) => post.title);
