@@ -26,7 +26,9 @@ function getErrorType(error) {
 
 function loadRss(watchedState, url) {
   watchedState.loadingProcess.status = 'loading';
-  return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
+  return fetch(
+    `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`
+  )
     .then((response) => response.json())
     .then((responseJson) => {
       const parsedXML = parser(responseJson.contents);
@@ -64,13 +66,17 @@ function loadRss(watchedState, url) {
 function loadNewPosts(watchedState) {
   // console.log('watched state feeds', watchedState.feeds);
   const fetchNewPostsPromices = watchedState.feeds.map((feed) => {
-    return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
+    return fetch(
+      `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`
+    )
       .then((response) => response.json())
       .then((responseJson) => {
         const parsedXML = parser(responseJson.contents);
 
         const currentFeedId = feed.feedId;
-        const oldPosts = watchedState.posts.filter((post) => post.feedId === currentFeedId);
+        const oldPosts = watchedState.posts.filter(
+          (post) => post.feedId === currentFeedId
+        );
 
         // const allTitles = parsedXML.posts.map((post) => post.postTitle);
         const oldTitles = oldPosts.map((post) => post.title);
@@ -138,60 +144,59 @@ export default function app() {
   const { init } = i18nextInstance;
 
   const i18nextPromise = init({
-      lng: 'ru',
-      debug: true,
-      resources,
-    })
-    .then(() => {
-      yup.setLocale({
-        mixed: {
-          required: 'empty', // {key: empty}
-          notOneOf: 'exists',
-        },
-        string: {
-          url: 'invalidUrl',
-        },
-      });
-
-      function validateField(str, feeds) {
-        const feedsUrls = feeds.map((feed) => feed.url);
-
-        const schema = yup.string().url().required().notOneOf(feedsUrls);
-        return schema
-          .validate(str)
-          .then(() => null)
-          .catch((error) => error.message);
-      }
-
-      const watchedState = watch(elements, i18nextInstance, state);
-
-      elements.form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const value = elements.input.value;
-
-        validateField(value, watchedState.feeds).then((message) => {
-          watchedState.rssInput.error = message;
-          if (!message) {
-            watchedState.rssInput.isValid = true;
-            loadRss(watchedState, value).then(() => {
-              watchedState.rssInput.status = 'sent';
-            });
-          } else {
-            watchedState.rssInput.isValid = false;
-            watchedState.rssInput.status = 'sent';
-          }
-        });
-      });
-
-      elements.input.addEventListener('input', () => {
-        watchedState.rssInput.status = 'filling';
-        watchedState.rssInput.isValid = '?';
-      });
-
-      console.log('set timeouts init');
-
-      loadNewPosts(watchedState);
+    lng: 'ru',
+    debug: true,
+    resources,
+  }).then(() => {
+    yup.setLocale({
+      mixed: {
+        required: 'empty', // {key: empty}
+        notOneOf: 'exists',
+      },
+      string: {
+        url: 'invalidUrl',
+      },
     });
+
+    function validateField(str, feeds) {
+      const feedsUrls = feeds.map((feed) => feed.url);
+
+      const schema = yup.string().url().required().notOneOf(feedsUrls);
+      return schema
+        .validate(str)
+        .then(() => null)
+        .catch((error) => error.message);
+    }
+
+    const watchedState = watch(elements, i18nextInstance, state);
+
+    elements.form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const value = elements.input.value;
+
+      validateField(value, watchedState.feeds).then((message) => {
+        watchedState.rssInput.error = message;
+        if (!message) {
+          watchedState.rssInput.isValid = true;
+          loadRss(watchedState, value).then(() => {
+            watchedState.rssInput.status = 'sent';
+          });
+        } else {
+          watchedState.rssInput.isValid = false;
+          watchedState.rssInput.status = 'sent';
+        }
+      });
+    });
+
+    elements.input.addEventListener('input', () => {
+      watchedState.rssInput.status = 'filling';
+      watchedState.rssInput.isValid = '?';
+    });
+
+    console.log('set timeouts init');
+
+    loadNewPosts(watchedState);
+  });
 
   return i18nextPromise;
 }
