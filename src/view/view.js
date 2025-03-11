@@ -1,6 +1,6 @@
 import onChange from "on-change";
 import { loadingProcessValidationHandler, rssInputValidationHandler } from './handlers.js';
-import { renderFeeds, renderPosts } from "./renders.js";
+import { renderFeeds, renderPosts, renderWatchedPost, renderModalWindow } from "./renders.js";
 
 export default function(elements, i18next, state) {
     function render(path, value, previousValue) {
@@ -11,7 +11,7 @@ export default function(elements, i18next, state) {
                 break
             case 'posts':
                 console.log('posts added: ', value);
-                renderPosts(elements, i18next, value, previousValue);
+                renderPosts(elements, i18next, value, previousValue, watchedState);
                 break
             case 'rssInput.error':
                 console.log('errors added: ', value)
@@ -38,6 +38,13 @@ export default function(elements, i18next, state) {
             case 'loadingProcess.status':
                 console.log('url valid, loading process changed: ', value);
                 loadingProcessValidationHandler(elements, i18next, state, value);
+                break
+            case 'UI.watchedPosts':
+                renderWatchedPost(value);
+                break
+            case 'UI.modal':
+                renderModalWindow(elements, value)
+                break
         }
     }
 

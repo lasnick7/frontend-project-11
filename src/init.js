@@ -87,8 +87,8 @@ function loadNewPosts(watchedState) {
                     });
                 watchedState.posts.unshift(...newPosts);
 
-                console.log('all posts for current feed', parsedXML.posts)
-                console.log('old titles for current feed', oldTitles)
+                // console.log('all posts for current feed', parsedXML.posts)
+                // console.log('old titles for current feed', oldTitles)
                 console.log('new posts for current feed', newPosts)
             }).catch(error => console.log(error))
     });
@@ -106,6 +106,11 @@ export default function app() {
         feedback: document.querySelector('.feedback'),
         posts: document.querySelector('div.posts'),
         feeds: document.querySelector('div.feeds'),
+        modal: {
+            title: document.querySelector('.modal-title'),
+            body: document.querySelector('.modal-body'),
+            fullArticleBtn: document.querySelector('.full-article'),
+        }
     };
 
     const state = {
@@ -120,6 +125,10 @@ export default function app() {
         }, 
         feeds: [],
         posts: [],
+        UI: {
+            watchedPosts: [],
+            modal: null,
+        },
     };
 
     const i18nextInstance = i18next.createInstance();

@@ -68,7 +68,7 @@ function renderFeeds(elements, i18next, feeds) {
     console.log(feedsList);
 }
 
-function renderPosts(elements, i18next, posts, previousPosts) {
+function renderPosts(elements, i18next, posts, previousPosts, watchedState) {
     const newPostsCount = posts.length - previousPosts.length;
     const newPosts = posts.slice(0, newPostsCount);
 
@@ -105,11 +105,24 @@ function renderPosts(elements, i18next, posts, previousPosts) {
         const postTitleLink = document.createElement('a');
         postTitleLink.textContent = post.title;
 
-        const postDescription = document.createElement('button');
-        postDescription.textContent = i18next.t('buttons.watch')
+        postTitleLink.addEventListener('click', () => {
+            if (!watchedState.UI.watchedPosts.includes(post)) {
+                watchedState.UI.watchedPosts.unshift(post);
+            }
+        })
+
+        const watchButton = document.createElement('button');
+        watchButton.textContent = i18next.t('buttons.watch');
+
+        watchButton.addEventListener('click', () => {
+            if (!watchedState.UI.watchedPosts.includes(post)) {
+                watchedState.UI.watchedPosts.unshift(post);
+            }
+            watchedState.UI.modal = post;
+        });
 
         postItem.append(postTitleLink);
-        postItem.append(postDescription);
+        postItem.append(watchButton);
 
         setAttibutestoPostElement(postItem, post.postId, post.link);
     
@@ -118,4 +131,17 @@ function renderPosts(elements, i18next, posts, previousPosts) {
     postsList.prepend(...postsArr)
 }
 
-export { renderFeeds, renderPosts };
+function renderWatchedPost(watchedPosts) {
+    const lastWatchedPost = watchedPosts[0];
+    const watchedLink = document.querySelector(`[data-id="${lastWatchedPost.postId}"`);
+    watchedLink.classList.remove('fw-bold');
+    watchedLink.classList.add('fw-normal', 'link-secondary');
+}
+
+function renderModalWindow(elements, post) {
+    elements.modal.title.textContent = post.title;
+    elements.modal.body.textContent = post.description;
+    elements.modal.fullArticleBtn.href = post.link;
+}
+
+export { renderFeeds, renderPosts, renderWatchedPost, renderModalWindow };
