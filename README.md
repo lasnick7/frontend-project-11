@@ -5,7 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/958c4c549419dd64e8d4/maintainability)](https://codeclimate.com/github/lasnick7/frontend-project-11/maintainability)
 
 ### Vercel Link
-[RSS-агрегатор](https://frontend-project-11-qx9m.vercel.app/ "RSS-агрегатор")
+[RSS-агрегатор](https://frontend-project-11-eta-lemon.vercel.app/ "RSS-агрегатор")
 
 ### Usage
 
