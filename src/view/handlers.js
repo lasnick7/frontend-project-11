@@ -19,11 +19,14 @@ function loadingProcessValidationHandler(elements, i18next, state, value) {
     console.log('current loading process error: ', state.loadingProcess.error)
     switch (value) {
         case 'success':
-            elements.button.disabled = false;
-
-            elements.feedback.textContent = i18next.t('success.uploaded');
             elements.feedback.classList.remove('text-danger');
             elements.feedback.classList.add('text-success');
+            elements.feedback.textContent = i18next.t('success.uploaded');
+            elements.button.disabled = false;
+
+            // // elements.feedback.textContent = i18next.t('success.uploaded');
+            // elements.feedback.classList.remove('text-danger');
+            // elements.feedback.classList.add('text-success');
             break
         case 'loading':
             elements.button.disabled = true;
