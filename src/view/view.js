@@ -10,7 +10,9 @@ import {
   renderModalWindow,
 } from './renders.js';
 
-export default function (elements, i18next, state) {
+/* eslint-disable no-use-before-define */
+
+export default function watch(elements, i18next, state) {
   function render(path, value, previousValue) {
     switch (path) {
       case 'feeds':

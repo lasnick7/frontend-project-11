@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+// eslint-disable-next-line default-case
 
 function rssInputValidationHandler(elements, i18next, state, value) {
   console.log('url validation status changed: ', value);
@@ -14,7 +15,6 @@ function rssInputValidationHandler(elements, i18next, state, value) {
       elements.feedback.classList.remove('text-success');
       elements.feedback.classList.add('text-danger');
       break;
-    // eslint-disable-next-line default-case
   }
 }
 
@@ -38,13 +38,10 @@ function loadingProcessValidationHandler(elements, i18next, state, value) {
     case 'failed':
       elements.button.disabled = false;
 
-      elements.feedback.textContent = i18next.t(
-        `errors.${state.loadingProcess.error}`
-      );
+      elements.feedback.textContent = i18next.t(`errors.${state.loadingProcess.error}`);
       elements.feedback.classList.remove('text-success');
       elements.feedback.classList.add('text-danger');
       break;
-    // eslint-disable-next-line default-case
   }
 }
 
