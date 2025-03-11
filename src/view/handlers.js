@@ -10,12 +10,11 @@ function rssInputValidationHandler(elements, i18next, state, value) {
     case false:
       elements.input.classList.add('is-invalid');
 
-      elements.feedback.textContent = i18next.t(
-        `errors.${state.rssInput.error}`
-      );
+      elements.feedback.textContent = i18next.t(`errors.${state.rssInput.error}`);
       elements.feedback.classList.remove('text-success');
       elements.feedback.classList.add('text-danger');
       break;
+    // eslint-disable-next-line default-case
   }
 }
 
@@ -45,6 +44,7 @@ function loadingProcessValidationHandler(elements, i18next, state, value) {
       elements.feedback.classList.remove('text-success');
       elements.feedback.classList.add('text-danger');
       break;
+    // eslint-disable-next-line default-case
   }
 }
 

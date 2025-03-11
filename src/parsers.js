@@ -1,4 +1,4 @@
-export default function (data) {
+export default function parser(data) {
   const domParser = new DOMParser();
   const xmlDocument = domParser.parseFromString(data, 'text/xml');
   // console.log('XML Document', xmlDocument);

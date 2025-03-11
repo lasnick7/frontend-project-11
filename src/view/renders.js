@@ -10,7 +10,7 @@ function setAttibutestoPostElement(element, id, link) {
     'justify-content-between',
     'align-items-start',
     'border-0',
-    'border-end-0'
+    'border-end-0',
   );
 
   a.setAttribute('href', link);
@@ -142,9 +142,7 @@ function renderPosts(elements, i18next, posts, previousPosts, watchedState) {
 
 function renderWatchedPost(watchedPosts) {
   const lastWatchedPost = watchedPosts[0];
-  const watchedLink = document.querySelector(
-    `[data-id="${lastWatchedPost.postId}"`
-  );
+  const watchedLink = document.querySelector(`[data-id="${lastWatchedPost.postId}"`);
   watchedLink.classList.remove('fw-bold');
   watchedLink.classList.add('fw-normal', 'link-secondary');
 }
@@ -155,4 +153,9 @@ function renderModalWindow(elements, post) {
   elements.modal.fullArticleBtn.href = post.link;
 }
 
-export { renderFeeds, renderPosts, renderWatchedPost, renderModalWindow };
+export { 
+    renderFeeds,
+    renderPosts,
+    renderWatchedPost,
+    renderModalWindow,
+};

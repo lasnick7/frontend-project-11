@@ -10,7 +10,7 @@ import parser from './parsers.js';
 function getErrorType(error) {
   if (error === 'invalidRss') {
     return error;
-  } 
+  }
   if (error === 'Failed to fetch') {
     return 'network';
   }
@@ -30,7 +30,6 @@ function loadRss(watchedState, url) {
   )
     .then((response) => response.json())
     .then((responseJson) => {
-
       const parsedXML = parser(responseJson.contents);
 
       watchedState.loadingProcess.error = null;
@@ -47,11 +46,11 @@ function loadRss(watchedState, url) {
       watchedState.feeds.unshift(feed);
 
       const posts = parsedXML.posts.map((post) => ({
-          feedId,
-          postId: uniqueId('post_'),
-          title: post.postTitle,
-          description: post.postDescription,
-          link: post.postLink,
+        feedId,
+        postId: uniqueId('post_'),
+        title: post.postTitle,
+        description: post.postDescription,
+        link: post.postLink,
       }));
       watchedState.posts.unshift(...posts);
     })
@@ -66,9 +65,7 @@ function loadRss(watchedState, url) {
 function loadNewPosts(watchedState) {
   // console.log('watched state feeds', watchedState.feeds);
   const fetchNewPostsPromices = watchedState.feeds.map((feed) => {
-    return fetch(
-      `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`
-    )
+    return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
       .then((response) => response.json())
       .then((responseJson) => {
         const parsedXML = parser(responseJson.contents);
@@ -164,12 +161,8 @@ export default function app() {
         const schema = yup.string().url().required().notOneOf(feedsUrls);
         return schema
           .validate(str)
-          .then(() => {
-            return null;
-          })
-          .catch((error) => {
-            return error.message;
-          });
+          .then(() => null)
+          .catch((error) => error.message);
       }
 
       const watchedState = watch(elements, i18nextInstance, state);
