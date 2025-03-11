@@ -1,4 +1,4 @@
-import i18next from "i18next";
+import i18next from 'i18next';
 import resources from './locales/index.js';
 import * as yup from 'yup';
 import uniqueId from "lodash.uniqueid";
