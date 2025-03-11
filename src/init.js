@@ -14,14 +14,15 @@ function getErrorType(error) {
     return 'undefined';
 }
 
-function generateRandomParam() {
-    const randomParam = Math.random().toString(36).substring(7);
-    return randomParam;
-}
+// function generateRandomParam() {
+//     const randomParam = Math.random().toString(36).substring(7);
+//     return randomParam;
+// }
+// &v=${generateRandomParam()}
 
 function loadRss(watchedState, url) {
     watchedState.loadingProcess.status = 'loading';
-    return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}&v=${generateRandomParam()}`)
+    return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
         .then((response) => response.json())
         .then((responseJson) => {
             // console.log('response json', responseJson)
@@ -63,7 +64,7 @@ function loadRss(watchedState, url) {
 function loadNewPosts(watchedState) {
     // console.log('watched state feeds', watchedState.feeds);
     const fetchNewPostsPromices = watchedState.feeds.map((feed) => {
-        return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}&v=${generateRandomParam()}`)
+        return fetch(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
             .then((response) => response.json())
             .then((responseJson) => {
                 const parsedXML = parser(responseJson.contents);
