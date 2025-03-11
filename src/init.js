@@ -19,6 +19,7 @@ function getErrorType(error) {
 //     return randomParam;
 // }
 // &v=${generateRandomParam()}
+/* eslint-disable no-param-reassign */
 
 function loadRss(watchedState, url) {
   watchedState.loadingProcess.status = 'loading';
