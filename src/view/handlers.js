@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-// eslint-disable-next-line default-case
+/* eslint-disable default-case */
 
 function rssInputValidationHandler(elements, i18next, state, value) {
   console.log('url validation status changed: ', value);

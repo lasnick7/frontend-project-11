@@ -11,6 +11,8 @@ import {
 } from './renders.js';
 
 /* eslint-disable no-use-before-define */
+/* eslint-disable default-case */
+/* eslint-disable no-param-reassign */
 
 export default function watch(elements, i18next, state) {
   function render(path, value, previousValue) {
@@ -33,10 +35,7 @@ export default function watch(elements, i18next, state) {
         console.log('status changed: ', value);
         switch (value) {
           case 'sent':
-            if (
-              state.rssInput.isValid &&
-              state.loadingProcess.status === 'success'
-            ) {
+            if (state.rssInput.isValid && state.loadingProcess.status === 'success') {
               elements.input.value = '';
               elements.input.focus();
             }

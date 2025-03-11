@@ -10,7 +10,7 @@ function setAttibutestoPostElement(element, id, link) {
     'justify-content-between',
     'align-items-start',
     'border-0',
-    'border-end-0'
+    'border-end-0',
   );
 
   a.setAttribute('href', link);
