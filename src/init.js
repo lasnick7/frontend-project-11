@@ -6,6 +6,7 @@ import watch from './view/view.js';
 import parser from './parsers.js';
 
 /* eslint-disable no-param-reassign */
+/* eslint-disable arrow-body-style */
 
 function getErrorType(error) {
   if (error === 'invalidRss') {
@@ -134,8 +135,9 @@ export default function app() {
 
   const i18nextInstance = i18next.createInstance();
 
-  const i18nextPromise = i18nextInstance
-    .init({
+  const { init } = i18nextInstance;
+
+  const i18nextPromise = init({
       lng: 'ru',
       debug: true,
       resources,
