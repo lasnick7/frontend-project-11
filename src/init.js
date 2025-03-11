@@ -37,7 +37,7 @@ function loadRss(watchedState, url) {
             const feedId = uniqueId('feed_');
             const feed = {
                 feedId: feedId,
-                url: responseJson.status.url,
+                url: url,
                 title: parsedXML.feedTitle,
                 description: parsedXML.feedDescription,
             };
